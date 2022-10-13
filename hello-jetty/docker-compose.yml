@@ -1,0 +1,24 @@
+# バージョン2記法で記述する
+version: '2'
+
+# 起動するコンテナを定義する
+services:
+
+    # Jettyコンテナ
+    jetty:
+        # Dockerfileからビルドするのではなく、Docker Hubの公式イメージを使う
+        # サイズが小さいAlpineベースのイメージを使う
+        image: jetty:9.4.1-alpine
+
+        # コンテナ内のポートをホストに公開する
+        # 書式 "HOST:CONTAINER"
+        ports:
+            # Jettyのポートを同じ番号でホストに公開する
+            - "8080:8080"
+
+        # コンテナ内のフォルダーをホストとマウントする
+        # 書式 HOST（docker-compose.ymlからの相対パス）:CONTAINER（絶対パス）
+        volumes:
+            # Jettyのデプロイフォルダーに、GradleがWARを生成する先をマウントする
+            # foo.war には http://localhost:8080/foo でアクセスできるようになる
+            - ./build/libs:/var/lib/jetty/webapps
